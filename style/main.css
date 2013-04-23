@@ -1,0 +1,87 @@
+body {
+    margin: 0px;
+    background-color: #000;
+}
+
+.horizonte {
+    background-color: #884433;
+    margin: 1px 0px 0px 3px; /* evitar que se vea por los lados */
+    background-image: url("../images/cielov2.png");
+    /*background-repeat: no-repeat;*/
+    background-position: -65px -65px;
+    width: 245px;
+    height: 245px;
+    border-radius: 245px;
+    z-index: 1;
+    /*position: absolute;*/
+}
+
+.horizonte_marco{
+    background-image: url("../images/Artificial_Horizon_Indicator3.png");
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 400px;
+    z-index: 100;
+    position: absolute;
+}
+
+.brujula_marco {
+    background-image: url("../images/exterior_brujula.png");
+    background-repeat: no-repeat;
+    width: 247px;
+    height: 249px;
+    z-index: 100;
+    position: absolute;
+}
+
+.brujula {
+    background-image: url("../images/centro_brujula.png");
+    background-repeat: no-repeat;
+    width: 247px;
+    height: 249px;
+    border-radius: 680px;
+    z-index: 1;
+    /*position: absolute;*/
+}
+
+.camara {
+    padding: 10px;
+}
+
+.mapa {
+    padding: 10px;
+}
+
+.horizonte_space{
+    width: 270px;
+    height: 270px;
+    float:left;
+    padding: 10px;
+}
+
+.brujula_space{
+    width: 270px;
+    height: 270px;
+    margin-left:290px;
+    padding: 10px;
+}
+
+.left_column {
+    width: 540px;
+    float: left;
+    margin: 0px;
+
+}
+
+.right_column {
+    width: 540px;
+    margin: 0px 0px 0px 540px;
+}
+
+
+
+
+.nofloat{
+	clear: both;
+}
+
