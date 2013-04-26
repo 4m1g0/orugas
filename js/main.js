@@ -50,6 +50,16 @@ function test_compass()
 	giro2 += 2;
 }
 
+function get_hour()
+{
+    var todayDate=new Date();
+    var hours=todayDate.getHours();
+    var minutes=todayDate.getMinutes();
+    var seconds=todayDate.getSeconds();
+    
+    return hours + ':' + minutes + ':' + seconds;
+}
+
 
 function main()
 {

@@ -16,7 +16,7 @@
         jQuery(function($, undefined) {
             $('#orugas_terminal').terminal(function(command, term) {
                 if (command != '')
-                    term.echo('Recibido ' + command);
+                    term.echo('[' + get_hour() + '] ' + 'Recibido ' + command);
                 if (command == 'error')
                     term.error('test ');
             }, {
@@ -30,10 +30,10 @@
 <body>
 <div class="left_column">
     <div class="camara">   
-        <img src="images/tv.png" />
+        <img height="300" src="images/tv.png" />
     </div>
     <div class="mapa">
-        <iframe width="520" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.es/maps/ms?msa=0&amp;msid=200164137958357439378.0004db0d94895ec9bbd5a&amp;ie=UTF8&amp;t=h&amp;ll=43.362099,-8.412051&amp;spn=0.01092,0.018239&amp;z=15&amp;output=embed"></iframe>
+        <iframe width="520" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.es/maps/ms?msa=0&amp;msid=200164137958357439378.0004db0d94895ec9bbd5a&amp;ie=UTF8&amp;t=h&amp;ll=43.362099,-8.412051&amp;spn=0.01092,0.018239&amp;z=15&amp;output=embed"></iframe>
     </div>
     
 </div>
