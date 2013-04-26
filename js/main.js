@@ -53,6 +53,7 @@ function test_compass()
 
 function main()
 {
-    setInterval("test_horizon()", 40);
-    setInterval("test_compass()", 40);
+    setInterval("test_horizon()", 100);
+    setInterval("test_compass()", 100);
+    scroll = 1;     
 }

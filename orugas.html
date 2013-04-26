@@ -1,14 +1,30 @@
 <html>
 <head>
     <title> Orugas </title>
+    <meta charset="utf-8" />
     <link rel="stylesheet" href="style/main.css" type="text/css" />
     <script type="text/javascript" src="js/main.js"></script>
+    
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery.mousewheel-min.js"></script>
+    <script src="js/jquery.terminal-0.6.3.min.js"></script>
+    <link href="style/jquery.terminal.css" rel="stylesheet"/>
+    
+    <script>
+        main();
+        
+        jQuery(function($, undefined) {
+            $('#orugas_terminal').terminal(function(command, term) {
+                term.echo('test ' + command);
+            }, {
+                greetings: 'Hello',
+                name: 'js_demo',
+                height: 200,
+                prompt: 'js> '});
+        });
+    </script>
 </head>
 <body>
-<script>
-    main();
-</script>
-
 <div class="left_column">
     <div class="camara">   
         <img src="images/tv.png" />
@@ -18,9 +34,6 @@
     </div>
     
 </div>
-    
-    
-    
 <div class="right_column">
     <div class="horizonte_space">
         <div class="horizonte_marco"></div><div class="horizonte" id="horizon"></div>
@@ -28,8 +41,7 @@
     <div class="brujula_space">
         <div class="brujula_marco"></div><div class="brujula" id="compass"></div>
     </div>
-    <div class="nofloat"></div>
-    
+    <div id="orugas_terminal"></div>
 </div>
 
 </body>
