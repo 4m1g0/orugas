@@ -7,7 +7,7 @@
   	"name":"Tom Igoe"
    },
   "dependencies": {
-    "serialport": "git://github.com/voodootikigod/node-serialport.git",
+    "serialport": "https://github.com/voodootikigod/node-serialport/tarball/master",
     "socket.io": "0.9.x",
     "express": "3.x"
   },
