@@ -1,20 +1,115 @@
-function horizon_move(giro, altura)
-{
-   document.getElementById('horizon').style.webkitTransform= "rotate("+giro+"deg)";
-   document.getElementById('horizon').style.transform= "rotate("+giro+"deg)";
-   document.getElementById('horizon').style.backgroundPosition=" -65px "+ (-65-altura) +"px";
+var horizon, compass, map;
+
+function Horizon(element) {
+    this.height = 0.0;
+    this.rotation = 0.0;
+    this._element = element;
+    this.setHeight = function (height) {
+        this.height = height;
+    };
+    this.setRotation = function (rotation) {
+        this.rotation = rotation;
+    };
+    this.update = function () {
+        this._element.style.webkitTransform= "rotate(" + this.rotation + "deg)";
+        this._element.style.transform= "rotate(" + this.rotation + "deg)";
+        this._element.style.backgroundPosition=" -65px "+ (-65-this.height) +"px";
+    };
 }
 
-function compass_move(giro)
-{
-    document.getElementById('compass').style.transform= "rotate("+giro+"deg)";
-    document.getElementById('compass').style.webkitTransform= "rotate("+giro+"deg)";
+function Compass(element) {
+    this.rotation = 0.0;
+    this._element = element;
+    this.setRotation = function (rotation) {
+        this.rotation = rotation;
+    };
+    this.update = function () {
+        this._element.style.transform= "rotate(" + this.rotation + "deg)";
+        this._element.style.webkitTransform= "rotate(" + this.rotation + "deg)";
+    };
 }
 
-giro=0;
-gstep=1;
-altura=0;
-astep=8;
+function Map(element) { // TODO: fix this
+    this.center = new google.maps.LatLng(-33, 151);
+    this.point = new google.maps.LatLng(-33, 151);
+    this.image = 'images/centro_brujula.png';
+    this.zoom = 8;
+    this.options = {zoom: this.zoom, center: this.center, mapTypeId: 'satellite'};
+    this.map = new google.maps.Map(element, this.options);
+    this.point = new google.maps.Marker({
+        position: this.point,
+        draggable:true,
+        map: this.map,
+        icon: this.image
+    });
+}
+
+function getData(data) {
+    if (data.type == 'command_reply')
+    {
+        $('#orugas_terminal').terminal().echo('[' + get_hour() + '] ' + data.text);
+        return;
+    }
+    
+    if (data.type == 'error')
+    {
+        $('#orugas_terminal').terminal().error('[' + get_hour() + '] ' + data.text);
+        return;
+    }
+    
+    if (data.type == 'data')
+    {
+        // TODO: pharse data string
+    }
+}
+
+
+var stockholm = new google.maps.LatLng(59.32522, 18.07002);
+var parliament = new google.maps.LatLng(59.327383, 18.06747);
+var marker;
+var map;
+
+
+
+function main()
+{
+    window.onload = function() {
+        horizon = new Horizon(document.getElementById('horizon'));
+        compass = new Compass(document.getElementById('compass'));
+        //map = new Map(document.getElementById('map_canvas'));
+        
+        // TODO: remove debug code
+        setInterval("test_horizon()", 80);
+        setInterval("test_compass()", 80);
+    };
+    
+    jQuery(function($, undefined) {
+        $('#orugas_terminal').terminal(function(command, term) {
+            if (command != '')
+                term.echo('Recibido ' + command);
+            if (command == 'error')
+                term.error('test ');
+        }, {
+            greetings: 'Bienvenido al sistema de orugas versión 0.1.3.',
+            name: 'Orugas terminal',
+            height: 200,
+            prompt: '> '});
+    });
+    
+    // open a connection to the serial server:
+	var socket = io.connect('http://localhost:8080');
+
+	 // when you get a serialdata event, do this:
+	socket.on('serialEvent', getData(data));
+}
+
+
+/* A partir de aqui es codigo de debug */
+
+var giro=0,
+gstep=1,
+altura=0,
+astep=8,
 giro2 = 0;
 
 function test_horizon()
@@ -37,7 +132,9 @@ function test_horizon()
 	if (altura <= -378)
 		altura = 0;
 
-	horizon_move(giro, altura);
+    horizon.setHeight(altura);
+    horizon.setRotation(giro);
+	horizon.update();
 
 }
 
@@ -46,7 +143,9 @@ function test_compass()
 	if (giro2 >= 360)
 	    giro2 = 0;
 	    
-	compass_move(giro2);
+	compass.setRotation(giro2);
+	compass.update();
+	
 	giro2 += 2;
 }
 
@@ -61,9 +160,4 @@ function get_hour()
 }
 
 
-function main()
-{
-    setInterval("test_horizon()", 80);
-    setInterval("test_compass()", 80);
-    scroll = 1;     
-}
+
