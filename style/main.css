@@ -52,6 +52,11 @@ body {
     padding: 10px;
 }
 
+#map-canvas {
+    height:350px;
+    width:400px;
+}
+
 .horizonte_space{
     width: 270px;
     height: 270px;

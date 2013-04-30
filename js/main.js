@@ -29,19 +29,13 @@ function Compass(element) {
     };
 }
 
-function Map(element) { // TODO: fix this
-    this.center = new google.maps.LatLng(-33, 151);
-    this.point = new google.maps.LatLng(-33, 151);
-    this.image = 'images/centro_brujula.png';
-    this.zoom = 8;
-    this.options = {zoom: this.zoom, center: this.center, mapTypeId: 'satellite'};
-    this.map = new google.maps.Map(element, this.options);
-    this.point = new google.maps.Marker({
-        position: this.point,
-        draggable:true,
-        map: this.map,
-        icon: this.image
-    });
+function Map(element) {
+    this.mapOptions = {
+        zoom: 17,
+        center: new google.maps.LatLng(43.362138, -8.412518),
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    };
+    this.map = new google.maps.Map(element, this.mapOptions);
 }
 
 function getData(data) {
@@ -64,19 +58,12 @@ function getData(data) {
 }
 
 
-var stockholm = new google.maps.LatLng(59.32522, 18.07002);
-var parliament = new google.maps.LatLng(59.327383, 18.06747);
-var marker;
-var map;
-
-
-
 function main()
 {
     window.onload = function() {
         horizon = new Horizon(document.getElementById('horizon'));
         compass = new Compass(document.getElementById('compass'));
-        //map = new Map(document.getElementById('map_canvas'));
+        map = new Map(document.getElementById('map-canvas'));
         
         // TODO: remove debug code
         setInterval("test_horizon()", 80);
