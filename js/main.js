@@ -1,4 +1,4 @@
-var horizon, compass, map;
+var horizon, compass, map, orugas, joystick;
 
 function Horizon(element) {
     this.height = 0.0;
@@ -65,7 +65,7 @@ function Map(element) {
     };
 }
 
-function getData(data) {
+function getOrugasData(data) {
     if (data.type == 'command_reply')
     {
         $('#orugas_terminal').terminal().echo('[' + get_hour() + '] ' + data.text);
@@ -82,6 +82,10 @@ function getData(data) {
     {
         // TODO: pharse data string
     }
+}
+
+function getJoystickData(data) {
+    $('#orugas_terminal').terminal().echo('[Joystick]: ' + data);
 }
 
 
@@ -104,10 +108,21 @@ function main()
     
     jQuery(function($, undefined) {
         $('#orugas_terminal').terminal(function(command, term) {
-            if (command != '')
+            if (command != '') {
                 term.echo('Recibido ' + command);
-            if (command == 'error')
+                return;
+            }
+            if (command == 'error') {
                 term.error('test ');
+                return;
+            }
+            if (command == 'send') {
+                socket.emit("sendData", {
+                    test: 1,
+                    test2: 2,
+                });
+                return;
+            }
         }, {
             greetings: 'Bienvenido al sistema de orugas versión 0.1.3.',
             name: 'Orugas terminal',
@@ -116,10 +131,12 @@ function main()
     });
     
     // open a connection to the serial server:
-	var socket = io.connect('http://localhost:8080');
+	orugas = io.connect('http://localhost:8080');
+	joystick = io.connect('http://localhost:8081');
 
 	 // when you get a serialdata event, do this:
-	socket.on('serialEvent', getData(data));
+	socket.on('serialEvent', getOrugasData(data));
+	joystick.on('serialEvent', getJoystickData(data));
 }
 
 
