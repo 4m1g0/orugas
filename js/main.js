@@ -108,23 +108,14 @@ function main()
     
     
     jQuery(function($, undefined) {
-        $('#orugas_terminal').terminal(function(command, term) {
-            if (command != '') {
-                term.echo('Recibido ' + command);
-                return;
-            }
-            if (command == 'error') {
-                term.error('test ');
-                return;
-            }
-            if (command == 'send') {
-                socket.emit("sendData", {
-                    test: 1,
-                    test2: 2,
-                });
-                return;
-            }
-        }, {
+        $('#orugas_terminal').terminal({
+                send: function(arg1) {
+                    orugas.emit("sendData", arg1);
+                },
+                add: function(a, b) {
+                    this.echo(parseInt(a)+parseInt(b));
+                }
+            }, {
             greetings: 'Bienvenido al sistema de orugas versión 0.1.3.',
             name: 'Orugas terminal',
             height: 200,

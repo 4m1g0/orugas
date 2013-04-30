@@ -38,11 +38,11 @@ io.sockets.on("connection", function(socket) {
         port.write("x");
         connected = false;
     }).on("sendData", function(data) {
-        port.write(data.led);
+        port.write(data);
     });
 
-    port.on("data", function(data) {
+    /*port.on("data", function(data) {
         var serial_data = JSON.parse(data);
         socket.emit("serialEvent", serial_data);
-    });
+    });*/
 });
