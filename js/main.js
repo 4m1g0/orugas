@@ -60,7 +60,7 @@ function Map(element) {
         this.marker.setPosition(new google.maps.LatLng(x, y));
         
         // si el marcador se esta saliendo del mapa desplazamos el mapa
-        if (abs(this.x - this.centerX) > 0.0015 || abs(this.y - this.centerY) > 0.0015)
+        if (Math.abs(this.x - this.centerX) > 0.0015 || Math.abs(this.y - this.centerY) > 0.0015)
             this.move2Marker();
     };
 }
@@ -85,7 +85,8 @@ function getOrugasData(data) {
 }
 
 function getJoystickData(data) {
-    $('#orugas_terminal').terminal().echo('[Joystick]: ' + data);
+    $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
+    console.log(data);
 }
 
 
@@ -135,8 +136,8 @@ function main()
 	joystick = io.connect('http://localhost:8081');
 
 	 // when you get a serialdata event, do this:
-	socket.on('serialEvent', getOrugasData(data));
-	joystick.on('serialEvent', getJoystickData(data));
+	orugas.on('serialEvent', getOrugasData);
+	joystick.on('serialEvent', getJoystickData);
 }
 
 

@@ -7,7 +7,8 @@ if (port_name == undefined) {
 
 var serial = require("serialport"),
     port = new serial.SerialPort(port_name, {
-        parser: serial.parsers.readline("\r\n")
+        parser: serial.parsers.readline("\r\n"),
+        baudrate: 115200
     });
 console.log("Opening serial port " + port_name);
 
@@ -19,9 +20,9 @@ server.listen(8081);
 console.log("Listening for new clients on http://localhost:8081");
 var connected = false;
 
-app.get("/", function(request, response) {
+/*app.get("/", function(request, response) {
     response.sendfile(__dirname + "/index.html");
-});
+});*/
 
 io.sockets.on("connection", function(socket) {
     if (!connected) {

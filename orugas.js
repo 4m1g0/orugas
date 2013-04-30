@@ -11,7 +11,8 @@ var serial = require("serialport"),
     });
 console.log("Opening serial port " + port_name);
 
-var app = require("express")(),
+var express = require("express");
+var app = express(),
     server = require("http").createServer(app),
     io = require("socket.io").listen(server);
 
@@ -19,8 +20,11 @@ server.listen(8080);
 console.log("Listening for new clients on http://localhost:8080");
 var connected = false;
 
+
+app.use(express.static(__dirname + '/'));
+
 app.get("/", function(request, response) {
-    response.sendfile(__dirname + "/client.html");
+    response.sendfile(__dirname + "/index.html");
 });
 
 io.sockets.on("connection", function(socket) {
