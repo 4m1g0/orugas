@@ -30,12 +30,39 @@ function Compass(element) {
 }
 
 function Map(element) {
+    this.x = 43.362138;
+    this.y = -8.412518;
+    this.centerX = this.x;
+    this.centerY = this.x;
+    
     this.mapOptions = {
         zoom: 17,
-        center: new google.maps.LatLng(43.362138, -8.412518),
+        center: new google.maps.LatLng(this.x, this.y),
         mapTypeId: google.maps.MapTypeId.HYBRID
     };
     this.map = new google.maps.Map(element, this.mapOptions);
+    
+    this.image = 'images/centro_brujula.png';
+    this.marker = new google.maps.Marker({
+      position: new google.maps.LatLng(this.x, this.y),
+      map: this.map,
+      title: 'Orugas',
+      /*icon: this.image*/
+    });
+    this.move2Marker = function() {
+        this.map.panTo(new google.maps.LatLng(this.x, this.y));
+        this.centerX= this.x;
+        this.centerY= this.y;
+    }
+    this.moveMarker = function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.marker.setPosition(new google.maps.LatLng(x, y));
+        
+        // si el marcador se esta saliendo del mapa desplazamos el mapa
+        if (abs(this.x - this.centerX) > 0.0015 || abs(this.y - this.centerY) > 0.0015)
+            this.move2Marker();
+    };
 }
 
 function getData(data) {
@@ -68,7 +95,12 @@ function main()
         // TODO: remove debug code
         setInterval("test_horizon()", 80);
         setInterval("test_compass()", 80);
+        map.moveMarker(map.x+0.0011, map.y);
+        map.move2Marker();
     };
+    
+    
+    
     
     jQuery(function($, undefined) {
         $('#orugas_terminal').terminal(function(command, term) {
