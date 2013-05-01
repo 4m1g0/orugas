@@ -28,21 +28,16 @@ app.get("/", function(request, response) {
 });
 
 io.sockets.on("connection", function(socket) {
-    if (!connected) {
-        port.flush();
-        port.write("c");
-        connected = true;
-    }
-
-    socket.on("disconnect", function() {
-        port.write("x");
-        connected = false;
-    }).on("sendData", function(data) {
+    socket.on("sendData", function(data) {
         port.write(data);
     });
 
-    /*port.on("data", function(data) {
-        var serial_data = JSON.parse(data);
+    port.on("data", function(data) {
+        try {
+            var serial_data = JSON.parse(data);
+        } catch(e) {
+            return; // Malformed JSON string. Ignore.
+        }
         socket.emit("serialEvent", serial_data);
-    });*/
+    });
 });
