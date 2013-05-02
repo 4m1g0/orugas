@@ -90,8 +90,8 @@ function getOrugasData(data) {
     
     if (data.t == 2) // position data 
     {
-        // "{\"t\":2,\"p\":[120,45],\"l\":[134.543,-8.432,134]}" -> p:[x,y] ll[latitud,longitud,orientacion]
-        // "{"t":2,"p":[120,45],"l":[134.543,-8.432,134]}"
+        // "{\"t\":2,\"p\":[120,45],\"l\":[134.543,-8.432,134],\"d\":23}" -> p:[x,y] ll[latitud,longitud,orientacion]
+        // "{"t":2,"o":[120,45],"g":[134.543,-8.432,134],"d":23}"
         horizon.setHeight(data.p[0]);
         horizon.setRotation(data.p[1]);
 	    horizon.update();
@@ -102,13 +102,14 @@ function getOrugasData(data) {
 	    map.moveMarker(data.l[0], data.l[1]);
 	    if (global.isDebug())
 	        $('#orugas_terminal').terminal().echo(
-	            '[orugas]: p = ' + data.p[0] + ',' + data.p[1] + ' l = ' + data.l[0] + ',' + data.l[1] + ',' + data.l[2]);
+	            '[orugas]: p = ' + data.o[0] + ',' + data.o[1] + ' l = ' + data.g[0] + ',' + data.g[1] + ',' + data.g[2] + ' d = ' + data.d);
     }
     
     if (data.t == 3) // enviroment data 
     {
-        // "{\"t\":3,\"l\":80,\"tem\":23}" l = luz, tem = temperatura
-        
+        // "{\"t\":3,\"l\":80,\"C\":23}" l = luz, tem = temperatura
+        if (global.isDebug())
+            $('#orugas_terminal').terminal().echo('[orugas]: luz = ' + data.l + ' temp = ' + data.C);
     }
     
     if (data.t == 4) // ack
@@ -120,6 +121,8 @@ function getOrugasData(data) {
 function getJoystickData(data) {
     if (global.isDebug())
         $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
+    
+    
     
     orugas.emit("sendData", data.x + ',' + data.y + ',' + data.b + '\n');
 }
