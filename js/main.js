@@ -1,5 +1,13 @@
 var horizon, compass, map, orugas, joystick;
 
+var config = new function () {
+    this.debug = 0;
+    
+    this.isDebug = function () {
+        return this.debug;
+    }
+}
+
 function Horizon(element) {
     this.height = 0.0;
     this.rotation = 0.0;
@@ -66,27 +74,54 @@ function Map(element) {
 }
 
 function getOrugasData(data) {
-    if (data.type == 'command_reply')
+    if (data.t == 0) // command response
     {
-        $('#orugas_terminal').terminal().echo('[' + get_hour() + '] ' + data.text);
+        // "{\"t\":0,\"m\":\"Pin 3 = HIGH\"}"
+        $('#orugas_terminal').terminal().echo('[' + get_hour() + '] ' + data.m);
         return;
     }
     
-    if (data.type == 'error')
+    if (data.t == 1) // error
     {
-        $('#orugas_terminal').terminal().error('[' + get_hour() + '] ' + data.text);
+        // "{\"t\":1,\"m\":\"Error numero 23\"}"
+        $('#orugas_terminal').terminal().error('[' + get_hour() + '] ' + data.m);
         return;
     }
     
-    if (data.type == 'data')
+    if (data.t == 2) // position data 
     {
-        // TODO: pharse data string
+        // "{\"t\":2,\"p\":[120,45],\"l\":[134.543,-8.432,134]}" -> p:[x,y] ll[latitud,longitud,orientacion]
+        // "{"t":2,"p":[120,45],"l":[134.543,-8.432,134]}"
+        horizon.setHeight(data.p[0]);
+        horizon.setRotation(data.p[1]);
+	    horizon.update();
+	    
+	    compass.setRotation(data.l[2]);
+	    compass.update();
+	    
+	    map.moveMarker(data.l[0], data.l[1]);
+	    if (global.isDebug())
+	        $('#orugas_terminal').terminal().echo(
+	            '[orugas]: p = ' + data.p[0] + ',' + data.p[1] + ' l = ' + data.l[0] + ',' + data.l[1] + ',' + data.l[2]);
+    }
+    
+    if (data.t == 3) // enviroment data 
+    {
+        // "{\"t\":3,\"l\":80,\"tem\":23}" l = luz, tem = temperatura
+        
+    }
+    
+    if (data.t == 4) // ack
+    {
+        // TODO:
     }
 }
 
 function getJoystickData(data) {
-    $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
-    console.log(data);
+    if (global.isDebug())
+        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
+    
+    orugas.emit("sendData", data.x + ',' + data.y + ',' + data.b + '\n');
 }
 
 
