@@ -13,10 +13,10 @@ function Horizon(element) {
     this.rotation = 0.0;
     this._element = element;
     this.setHeight = function (height) {
-        this.height = height;
+        this.height = -height;
     };
     this.setRotation = function (rotation) {
-        this.rotation = rotation;
+        this.rotation = -rotation;
     };
     this.update = function () {
         this._element.style.webkitTransform= "rotate(" + this.rotation + "deg)";
@@ -124,7 +124,7 @@ function getJoystickData(data) {
     
     
     
-    orugas.emit("sendData", data.x + ',' + data.y + ',' + data.b + '\n');
+    orugas.emit("sendData", data.x + ',' + data.y + '\n');
 }
 
 

@@ -72,7 +72,7 @@ body {
 }
 
 .left_column {
-    width: 540px;
+    width: 450px;
     float: left;
     margin: 0px;
 
@@ -80,7 +80,7 @@ body {
 
 .right_column {
     width: 540px;
-    margin: 0px 0px 0px 540px;
+    margin: 0px 0px 0px 450px;
 }
 
 
