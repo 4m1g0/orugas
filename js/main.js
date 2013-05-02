@@ -1,7 +1,7 @@
 var horizon, compass, map, orugas, joystick;
 
-var config = new function () {
-    this.debug = 0;
+var global = new function () {
+    this.debug = 1;
     
     this.isDebug = function () {
         return this.debug;
@@ -92,17 +92,17 @@ function getOrugasData(data) {
     {
         // "{\"t\":2,\"p\":[120,45],\"l\":[134.543,-8.432,134],\"d\":23}" -> p:[x,y] ll[latitud,longitud,orientacion]
         // "{"t":2,"o":[120,45],"g":[134.543,-8.432,134],"d":23}"
-        horizon.setHeight(data.p[0]);
-        horizon.setRotation(data.p[1]);
+        horizon.setHeight(data.o[1]);
+        horizon.setRotation(data.o[0]);
 	    horizon.update();
 	    
-	    compass.setRotation(data.l[2]);
+	    compass.setRotation(data.g[2]);
 	    compass.update();
 	    
-	    map.moveMarker(data.l[0], data.l[1]);
+	    map.moveMarker(data.g[0], data.g[1]);
 	    if (global.isDebug())
 	        $('#orugas_terminal').terminal().echo(
-	            '[orugas]: p = ' + data.o[0] + ',' + data.o[1] + ' l = ' + data.g[0] + ',' + data.g[1] + ',' + data.g[2] + ' d = ' + data.d);
+	            '[orugas]: p = ' + data.o[1] + ',' + data.o[0] + ' l = ' + data.g[0] + ',' + data.g[1] + ',' + data.g[2] + ' d = ' + data.d);
     }
     
     if (data.t == 3) // enviroment data 
@@ -136,10 +136,10 @@ function main()
         map = new Map(document.getElementById('map-canvas'));
         
         // TODO: remove debug code
-        setInterval("test_horizon()", 80);
+        /*setInterval("test_horizon()", 80);
         setInterval("test_compass()", 80);
         map.moveMarker(map.x+0.0011, map.y);
-        map.move2Marker();
+        map.move2Marker();*/
     };
     
     
