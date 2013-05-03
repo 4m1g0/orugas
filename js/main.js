@@ -182,7 +182,7 @@ function getOrugasData(data) {
 
 function getJoystickData(data) {
     if (global.isDebug())
-        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data[0] + '  y = ' + data.[1] + '  b = ' + data[2]);
+        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data[0] + '  y = ' + data[1] + '  b = ' + data[2]);
     
     orugas.emit("sendData", 'm' + data[0] + ',' + data[1] + '\n');
     

@@ -61,26 +61,86 @@ body {
     width: 270px;
     height: 270px;
     float:left;
-    padding: 10px;
+    margin-right:290px;
 }
 
 .brujula_space{
     width: 270px;
     height: 270px;
-    margin-left:290px;
-    padding: 10px;
+    margin-left: 290px;
+}
+
+.termometro_space{
+    width: 100px;
+    height: 270px;
+    padding:0;
+    float: left;
+    margin-top:30px;
+}
+
+.termometro_marco {
+    width: 86px;
+    height: 200px;
+    background-image: url("../images/termometro.png");
+    background-repeat: no-repeat;
+    z-index: 100;
+    position: absolute;
+}
+
+.termometro {
+    width: 86px;
+    height: 200px;
+    background-image: url("../images/termometro_fondo.png");
+    background-repeat: no-repeat;
+}
+
+.luminosidad_space{
+    width: 100px;
+    height: 270px;
+    padding:30px;
+    margin-left:380px;
+}
+
+.luminosidad_marco {
+    width: 86px;
+    height: 200px;
+    background-image: url("../images/luminosidad.png");
+    background-repeat: no-repeat;
+    z-index: 100;
+    position: absolute;
+}
+
+.luminosidad {
+    width: 86px;
+    height: 200px;
+    background-image: url("../images/luminosidad_fondo.png");
+    background-repeat: no-repeat;
 }
 
 .left_column {
     width: 450px;
     float: left;
     margin: 0px;
-
 }
 
 .right_column {
-    width: 540px;
+    width: 640px;
     margin: 0px 0px 0px 450px;
+}
+
+.right_left {
+    margin: 0;
+    padding: 0;
+    width: 550px;
+    height: 270px;
+    float:left;
+}
+
+.right_right {
+    margin: 0px 0px 0px 280px;
+    padding: 0;
+    width: 550px;
+    height: 270px;
 }
 
 

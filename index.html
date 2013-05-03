@@ -17,17 +17,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     
     <script>
-        /*function initialize() {
-          var mapOptions = {
-            zoom: 8,
-            center: new google.maps.LatLng(-34.397, 150.644),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-          map = new google.maps.Map(document.getElementById('map-canvas'),
-              mapOptions);
-        }
-
-        google.maps.event.addDomListener(window, 'load', initialize);*/
         main();
     </script>
   </head>
@@ -43,13 +32,21 @@
         
     </div>
     <div class="right_column">
-        <div id="horizonte_text"></div>
-        <div class="horizonte_space">
-            <div class="horizonte_marco"></div><div class="horizonte" id="horizon"></div>
+        <div class="right_left">
+            <div class="horizonte_space">
+                <div class="horizonte_marco"></div><div class="horizonte" id="horizon"></div>
+            </div>
+            <div class="brujula_space">
+                <div class="brujula_marco"></div><div class="brujula" id="compass"></div>
+            </div>
         </div>
-        <div id="brujula_text"></div>
-        <div class="brujula_space">
-            <div class="brujula_marco"></div><div class="brujula" id="compass"></div>
+        <div class="right_right">
+            <div class="termometro_space">
+                <div class="termometro_marco"></div><div class="termometro" id="termometer"></div>
+            </div>
+            <div class="luminosidad_space">
+                <div class="luminosidad_marco"></div><div class="luminosidad" id="luminosity"></div>
+            </div>
         </div>
         <div id="orugas_terminal"></div>
     </div>
