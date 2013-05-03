@@ -1,6 +1,6 @@
-
 #include <Servo.h> 
-//*******
+
+/*********/
 #define out_STBY 9
 #define out_B_PWM 12
 #define out_A_PWM 6
@@ -12,11 +12,13 @@
 #define motor_B 1
 #define motor_AB 2
 
+/*********/
 
-//*********
+const int loopTime = 100;
+const int positionTime = 100;
+const int enviromentTime = 2000;
 
-
-char val;
+unsigned long loopTimer=0, positionTimer=0, enviromentTimer=0;
 
 int motorA1 = 3;
 int motorA2 = 5;
@@ -33,25 +35,26 @@ long distancia=0;
 long temperatura=0;
 long lum=0;
 
+float longitud;
+float latitud;
+float orientacion;
+
 //Acelerometro
-  int x;
-  int y;
-  int z;
+int x;
+int y;
+int z;
+  
 int offsetX=0;
 int offsetY=0;
-
-int vel=0;
 
 Servo servoPan;
 Servo servoTilt;
 
-
-//*************************************************************************************************
+/************************************/
 
 void setup() {
-  
   Serial.begin(9600); // Start serial communication
-  
+
   pinMode(out_STBY,OUTPUT);
   pinMode(out_A_PWM,OUTPUT);
   pinMode(out_A_IN1,OUTPUT);
@@ -69,129 +72,59 @@ void setup() {
   pinMode(A5, INPUT);
   servoPan.attach(4);
   servoTilt.attach(5);
-  
+
   Home();
-  
 }
+
 void loop() {
-  if (Serial.available()) { // If data is available to read,
-    val = Serial.read(); // read it and store it in val
+  loopTimer = millis();
+
+  // if available read serial
+  if (Serial.available()) {
+    parseSerial();
   }
-  if (val == 'A') { //Hacia adelante
-          vel=leeSerie(2);
-          motor_standby(false);
-          motor_speed2(motor_A,vel);
-          motor_speed2(motor_B,vel);
-  } 
-  else if (val == 'R') {//Hacia detras
-          vel=leeSerie(2);
-          motor_standby(false);
-          motor_speed2(motor_A,-vel);
-          motor_speed2(motor_B,-vel);
-  }
-  else if (val == 'D') {//Derecha
-          vel=leeSerie(2);
-          motor_standby(false);
-          motor_speed2(motor_A,vel);
-          motor_speed2(motor_B,-vel);
-  } 
-  else if (val == 'I') {//Izquierda
-          vel=leeSerie(2);
-          motor_standby(false);
-          motor_speed2(motor_A,-vel);
-          motor_speed2(motor_B,vel);
-  } 
-  else if (val == 'S') {//Standby
-          motor_standby(true);
-  } 
-  else if (val == 'P') {//Pan izquierda
-    if (anglePan < 180) {
-      anglePan += 5;
-    } 
-  } 
-  else if (val == 'x') {
-    anglePan =leeSerie(3);
-  }  
-  else if (val == 'y') {
-    angleTilt =leeSerie(3);
-  } 
-  else if (val == 'p') {//Pan Derecha
-    if (anglePan > 0) {
-      anglePan -= 5;
-    } 
-  } 
-  else if (val == 'T') {//Tilt Arriba
-    if (angleTilt < 180) {
-      angleTilt += 5;
-    } 
-  } 
-  else if (val == 't') {//Tilt Abajo
-    if (angleTilt > 0) {
-      angleTilt -= 5;
-    } 
-  }
-  else if (val == 'H') {//Home
-    Home();
-    }      
-  else if (val == 'L') {//Home
-    digitalWrite(laser,HIGH);
-    }      
-  else if (val == 'l') {//Home
-    digitalWrite(laser,LOW);
-    }      
-  else if (val == 'F') {//Home
-    digitalWrite(luz,HIGH);
-    }      
-  else if (val == 'f') {//Home
-    digitalWrite(luz,LOW);
-    }    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  else if (val == 'Z') {//
-    int AX=analogRead(A0)/4;
-    if(AX<=99) {Serial.print(0);}
-    Serial.print(AX);
-    val=0;
-  } 
-  else if (val == 'm') {
-    acelerometro(false);
-    ultrasonidos();
+
+  // if necesary read enviroment sensors and send data
+  if (millis() - enviromentTimer > enviromentTime) {
+    // light, temperature, and gps
     temp();
     luminosidad();
-    Serial.print("1");
+    Serial.print("{\"e\":[");
+    Serial.print(lum);
     Serial.print(",");
+    Serial.print(temperatura);
+    Serial.print(",");
+    Serial.print(latitud);
+    Serial.print(",");
+    Serial.print(longitud);
+    Serial.println("]}");
+    
+    enviromentTimer = millis();
+  }
+
+  // if necesary read position sensors and send data
+  if (millis() - positionTimer > positionTime) {
+    // acelerometer, distance, and compass
+    // TODO: get GPS or compass orientation
+    acelerometro(false);
+    ultrasonidos();
+    
+    Serial.print("{\"p\":[");
     Serial.print(y);
     Serial.print(",");
     Serial.print(x);
     Serial.print(",");
     Serial.print(distancia);
     Serial.print(",");
-    Serial.print(lum);
-    Serial.print(",");
-    Serial.println(temperatura);
+    Serial.print(orientacion); // TODO: set this variable
+    Serial.println("]}");
     
+    positionTimer = millis();
+  }
 
-    val=0;
-  }
-  else if (val == 'c') {//Calibrado Acelerometro
-    Home();
-    calibraAcel();
-    }   
-  else {
-    digitalWrite(13, HIGH);
-  }
-  servoPan.write(anglePan);
-  servoTilt.write(angleTilt);
-  
-  delay(50); // Wait 100 milliseconds for next reading
+  // Si el serial no esta sobrecargado esperamos
+  while (millis() - loopTimer < loopTime && !Serial.available())
+    delay(20);
 }
 
 void Home(){

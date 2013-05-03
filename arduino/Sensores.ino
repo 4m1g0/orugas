@@ -1,8 +1,4 @@
-//////////////////////////////////////////////////////////////////
-//©2011 bildr
-//Released under the MIT License - Please reuse change and share
-//Simple code for the ADXL335, prints calculated orientation via serial
-//////////////////////////////////////////////////////////////////
+
 void acelerometro(boolean debug){
   //Analog read pins
   const int xPin = 0;
@@ -27,11 +23,11 @@ void acelerometro(boolean debug){
   y = (RAD_TO_DEG * (atan2(-xAng, -zAng) + PI))+offsetY;
 
   if(debug){//Output the caculations
-  Serial.print("[Acelerometro] ");
-  Serial.print("Pitch: ");
-  Serial.print(y);
-  Serial.print(" | Roll: ");
-  Serial.println(x);
+    Serial.print("[Acelerometro] ");
+    Serial.print("Pitch: ");
+    Serial.print(y);
+    Serial.print(" | Roll: ");
+    Serial.println(x);
   }
 }
 
@@ -57,26 +53,24 @@ void calibraAcel(){
 
 
 void ultrasonidos(){
-int sum=0;
-int anVolt;
-for(int i = 0; i < 5 ; i++)
+  int sum=0;
+  int anVolt;
+  for(int i = 0; i < 5 ; i++)
   {
     //Used to read in the analog voltage output that is being sent by the MaxSonar device.
     //Scale factor is (Vcc/512) per inch. A 5V supply yields ~9.8mV/in
     anVolt = analogRead(A3);
     sum += anVolt;
-
   }  
-  distancia =  1.39*(sum/5);
-
   
+  distancia =  1.39*(sum/5);
 }
 
 void temp(){
-temperatura=(analogRead(A4)*0.48828125)-273;  
+  temperatura = (analogRead(A4)*0.48828125)-273;  
 }
 
 void luminosidad(){
-lum=map(analogRead(A5),0,1024,0,100);
+  lum = map(analogRead(A5),0,1024,0,100);
 }
 
