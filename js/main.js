@@ -15,7 +15,7 @@ function getLeter(x, on) {
         case 4: return on?'P':'P';
         case 8: return on?'p':'p';
         case 16: return on?'T':'T';
-        case 32: return on?'t':'t';  
+        case 32: return on?'t':'t';
     }
 } 
 
@@ -147,45 +147,43 @@ function Tilt(element) {
 }
 
 function getOrugasData(data) {
-    try { // enviroment data
-        light.setLight(data.e[0]);
+   if (data.e != undefined) {
+        luminosity.setLuminosity(data.e[0]);
         temperature.setTemperature(data.e[1]);
         map.moveMarker(data.e[2], data.e[3]);
-        light.update();
+        luminosity.update();
         temperature.update();
         if (global.isDebug())
             $('#orugas_terminal').terminal().echo('[Orugas] ' + data.e[0] + ',' + data.e[1] + ',' + data.e[2] + ',' + data.e[3]);
         return;
-    } catch (e) {}
-    
-    try { // position data
+    } else if (data.p != undefined) {
         horizon.setHeight(data.p[1]);
         horizon.setRotation(data.p[0]);
-        pan.setDistance(data.p[2]);
-        tilt.setDistance(data.p[2]);
+        //pan.setDistance(data.p[2]);
+        //tilt.setDistance(data.p[2]);
 	    compass.setRotation(data.p[3]);
 	    horizon.update();
 	    compass.update();
-	    pan.update();
-	    tilt.update();
+	    //pan.update();
+	    //tilt.update();
 	    if (global.isDebug())
 	        $('#orugas_terminal').terminal().echo('[Orugas] ' + data.p[0] + ',' + data.p[1] + ',' + data.p[2] + ',' + data.p[3]);
 	    return;
-    } catch (e) {}
+    }
 }
 
 function getJoystickData(data) {
     if (global.isDebug())
         $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data[0] + '  y = ' + data[1] + '  b = ' + data[2]);
     
-    orugas.emit("sendData", 'm' + data[0] + ',' + data[1] + '\n');
+    orugas.emit("sendData", 'm' + data[0] + ',' + data[1] + '\r\n');
     
     // parse botons
     var changed = lastPulse ^ data[2]; // obtenemos un mapa con los bits que han cambiado
     var onOff;
     lastPulse = data[2];
     
-    for (i = 1; i < 1024; i*=2) {
+    for (i = 1; i <= 64; i*=2) {
         if (i & changed && i & data[2]) { // si el bit i ha cambiado y vale 1
             if (buttons & i) { // si ya estaba encendido lo apago
                 onOff = 0;
