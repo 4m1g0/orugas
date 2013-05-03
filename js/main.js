@@ -8,6 +8,23 @@ var global = new function () {
     }
 }
 
+function getLeter(x) {
+    switch (x) {
+        case 1: return '';
+        case 2: return '';
+        case 4: return '';
+        case 8: return '';
+        case 16: return '';
+        case 32: return '';
+        case 64: return '';
+        case 128: return '';
+        case 512: return '';
+        case 1024: return '';
+        //TODO: Esta funcion debe devolver la letra asignada al boton X (ver codigo de arduino Serie.ino:8)
+    
+    }
+} 
+
 function Horizon(element) {
     this.height = 0.0;
     this.rotation = 0.0;
@@ -73,58 +90,107 @@ function Map(element) {
     };
 }
 
-function getOrugasData(data) {
-    if (data.t == 0) // command response
-    {
-        // "{\"t\":0,\"m\":\"Pin 3 = HIGH\"}"
-        $('#orugas_terminal').terminal().echo('[' + get_hour() + '] ' + data.m);
-        return;
+function Light(element) {
+    this._element = element;
+    this.light = 0;
+    
+    this.setLight = function(value) {
+        this.light = value;
     }
     
-    if (data.t == 1) // error
-    {
-        // "{\"t\":1,\"m\":\"Error numero 23\"}"
-        $('#orugas_terminal').terminal().error('[' + get_hour() + '] ' + data.m);
-        return;
-    }
-    
-    if (data.t == 2) // position data 
-    {
-        // "{\"t\":2,\"p\":[120,45],\"l\":[134.543,-8.432,134],\"d\":23}" -> p:[x,y] ll[latitud,longitud,orientacion]
-        // "{"t":2,"o":[120,45],"g":[134.543,-8.432,134],"d":23}"
-        horizon.setHeight(data.o[1]);
-        horizon.setRotation(data.o[0]);
-	    horizon.update();
-	    
-	    compass.setRotation(data.g[2]);
-	    compass.update();
-	    
-	    map.moveMarker(data.g[0], data.g[1]);
-	    if (global.isDebug())
-	        $('#orugas_terminal').terminal().echo(
-	            '[orugas]: p = ' + data.o[1] + ',' + data.o[0] + ' l = ' + data.g[0] + ',' + data.g[1] + ',' + data.g[2] + ' d = ' + data.d);
-    }
-    
-    if (data.t == 3) // enviroment data 
-    {
-        // "{\"t\":3,\"l\":80,\"C\":23}" l = luz, tem = temperatura
-        if (global.isDebug())
-            $('#orugas_terminal').terminal().echo('[orugas]: luz = ' + data.l + ' temp = ' + data.C);
-    }
-    
-    if (data.t == 4) // ack
-    {
+    this.update = function() {
         // TODO:
     }
+}
+
+function Temperature(element) {
+    this._element = element;
+    this.temperature = 0;
+    
+    this.setTemperature = function(value) {
+        this.temperature = value;
+    }
+    
+    this.update = function() {
+        // TODO:
+    }
+}
+
+function Pan(element) {
+    this._element = element;
+    this.pan = 0;
+    this.distance = 0;
+    
+    this.setPan = function(value) {
+        this.pan = value;
+    }
+    
+    this.setDistance = function(value) {
+        this.distance = value;
+    }
+    
+    this.update = function() {
+        // TODO:
+    }
+}
+
+function Tilt(element) {
+    this._element = element;
+    this.tilt = 0;
+    this.distance = 0;
+    
+    this.setTilt = function(value) {
+        this.tilt = value;
+    }
+    
+    this.setDistance = function(value) {
+        this.distance = value;
+    }
+    
+    this.update = function() {
+        // TODO:
+    }
+}
+
+function getOrugasData(data) {
+    try { // enviroment data
+        light.setLight(data.e[0]);
+        temperature.setTemperature(data.e[1]);
+        map.moveMarker(data.e[2], data.e[3]);
+        light.update();
+        temperature.update();
+        if (global.isDebug())
+            $('#orugas_terminal').terminal().echo('[Orugas] ' + data.e[0] + ',' + data.e[1] + ',' + data.e[2] + ',' + data.e[3]);
+        return;
+    } catch (e) {}
+    
+    try { // position data
+        horizon.setHeight(data.p[1]);
+        horizon.setRotation(data.p[0]);
+        pan.setDistance(data.p[2]);
+        tilt.setDistance(data.p[2]);
+	    compass.setRotation(data.p[3]);
+	    horizon.update();
+	    compass.update();
+	    pan.update();
+	    tilt.update();
+	    if (global.isDebug())
+	        $('#orugas_terminal').terminal().echo('[Orugas] ' + data.p[0] + ',' + data.p[1] + ',' + data.p[2] + ',' + data.p[3]);
+	    return;
+    } catch (e) {}
 }
 
 function getJoystickData(data) {
     if (global.isDebug())
         $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
     
+    orugas.emit("sendData", 'm' + data.x + ',' + data.y + '\n');
     
-    
-    orugas.emit("sendData", data.x + ',' + data.y + '\n');
+    // parse botons
+    for (i = 1; i < 1024; i*=2) {
+        if (i & data.b)
+             orugas.emit("sendData", 'b' + getLeter(i) + '\n');
+    }
 }
 
 
