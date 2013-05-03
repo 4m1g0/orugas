@@ -1,4 +1,4 @@
-var horizon, compass, map, orugas, joystick;
+var horizon, compass, map, orugas, joystick, buttons, lastPulse;
 
 var global = new function () {
     this.debug = 1;
@@ -8,18 +8,18 @@ var global = new function () {
     }
 }
 
-function getLeter(x) {
+function getLeter(x, on) {
     switch (x) {
-        case 1: return '';
-        case 2: return '';
-        case 4: return '';
-        case 8: return '';
-        case 16: return '';
-        case 32: return '';
-        case 64: return '';
-        case 128: return '';
-        case 512: return '';
-        case 1024: return '';
+        case 1: return on?'':'';
+        case 2: return on?'':'';
+        case 4: return on?'':'';
+        case 8: return on?'':'';
+        case 16: return on?'':'';
+        case 32: return on?'':'';
+        case 64: return on?'':'';
+        case 128: return on?'':'';
+        case 512: return on?'':'';
+        case 1024: return on?'':'';
         //TODO: Esta funcion debe devolver la letra asignada al boton X (ver codigo de arduino Serie.ino:8)
     
     }
@@ -182,14 +182,26 @@ function getOrugasData(data) {
 
 function getJoystickData(data) {
     if (global.isDebug())
-        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data.x + '  y = ' + data.y + '  b = ' + data.b);
+        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data[0] + '  y = ' + data.[1] + '  b = ' + data[2]);
     
-    orugas.emit("sendData", 'm' + data.x + ',' + data.y + '\n');
+    orugas.emit("sendData", 'm' + data[0] + ',' + data[1] + '\n');
     
     // parse botons
+    var changed = lastPulse ^ data[2]; // obtenemos un mapa con los bits que han cambiado
+    var onOff;
+    lastPulse = data[2];
+    
     for (i = 1; i < 1024; i*=2) {
-        if (i & data.b)
-             orugas.emit("sendData", 'b' + getLeter(i) + '\n');
+        if (i & changed && i & data[2]) { // si el bit i ha cambiado y vale 1
+            if (buttons & i) { // si ya estaba encendido lo apago
+                onOff = 0;
+                buttons &= ~i;
+            } else { // si estaba apagado lo enciendo
+                onOff = 1;
+                buttons |= i;
+            }
+            orugas.emit("sendData", 'b' + getLeter(i, onOff) + '\n');
+        }
     }
 }
 

@@ -52,16 +52,16 @@ void parseSerial() {
   }
   
   if (serialData[0] == 'm') { // movement
-    int Jpos[2];
-    int speedA, speedB;
+    int speed[2];
     
-    
-    if (!parseCommand(serialData+1, Jpos)) { // TODO: Implement a better algorithm
-      speedA = constrain(Jpos[0] + Jpos[1], -100, 100);
-      speedB = constrain(Jpos[0] - Jpos[1], -100, 100);
-      motor_standby(false); // FIXME: cuando paramos?
-      motor_speed2(motor_A,speedA);
-      motor_speed2(motor_B,speedB);
+    if (!parseCommand(serialData+1, speed)) {
+      if (speed[0] == speed[1] == 0)
+        motor_standby(true); // paramos los motores FIXME: y si se pierde el paquete con ceros?
+      else {
+        motor_standby(false); 
+        motor_speed2(motor_A,speed[0]);
+        motor_speed2(motor_B,speed[1]);
+      }
     }
     return;
   }
