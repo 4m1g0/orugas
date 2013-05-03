@@ -1,4 +1,4 @@
-var horizon, compass, map, orugas, joystick, buttons, lastPulse;
+var horizon, compass, map, orugas, joystick, buttons, lastPulse, temperature, luminosity;
 
 var global = new function () {
     this.debug = 1;
@@ -10,18 +10,12 @@ var global = new function () {
 
 function getLeter(x, on) {
     switch (x) {
-        case 1: return on?'':'';
-        case 2: return on?'':'';
-        case 4: return on?'':'';
-        case 8: return on?'':'';
-        case 16: return on?'':'';
-        case 32: return on?'':'';
-        case 64: return on?'':'';
-        case 128: return on?'':'';
-        case 512: return on?'':'';
-        case 1024: return on?'':'';
-        //TODO: Esta funcion debe devolver la letra asignada al boton X (ver codigo de arduino Serie.ino:8)
-    
+        case 1: return on?'L':'l';
+        case 2: return on?'F':'f';
+        case 4: return on?'P':'P';
+        case 8: return on?'p':'p';
+        case 16: return on?'T':'T';
+        case 32: return on?'t':'t';  
     }
 } 
 
@@ -90,16 +84,16 @@ function Map(element) {
     };
 }
 
-function Light(element) {
+function Luminosity(element) {
     this._element = element;
-    this.light = 0;
+    this.luminosity = 0;
     
-    this.setLight = function(value) {
-        this.light = value;
+    this.setLuminosity = function(value) {
+        this.luminosity = value;
     }
     
     this.update = function() {
-        // TODO:
+        this._element.style.backgroundPosition="0px "+ (200-this.luminosity*2) +"px";
     }
 }
 
@@ -112,7 +106,7 @@ function Temperature(element) {
     }
     
     this.update = function() {
-        // TODO:
+        this._element.style.backgroundPosition="0px "+ (130-this.temperature*2.6) +"px";
     }
 }
 
@@ -212,9 +206,17 @@ function main()
         horizon = new Horizon(document.getElementById('horizon'));
         compass = new Compass(document.getElementById('compass'));
         map = new Map(document.getElementById('map-canvas'));
+        temperature = new Temperature(document.getElementById('termometer'));
+        luminosity = new Luminosity(document.getElementById('luminosity'));
+        
+        /*temperature.setTemperature(30);
+        temperature.update();
+        
+        luminosity.setLuminosity(30);
+        luminosity.update();
         
         // TODO: remove debug code
-        /*setInterval("test_horizon()", 80);
+        setInterval("test_horizon()", 80);
         setInterval("test_compass()", 80);
         map.moveMarker(map.x+0.0011, map.y);
         map.move2Marker();*/

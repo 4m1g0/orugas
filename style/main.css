@@ -88,8 +88,8 @@ body {
 }
 
 .termometro {
-    width: 86px;
-    height: 200px;
+    width: 85px;
+    height: 199px;
     background-image: url("../images/termometro_fondo.png");
     background-repeat: no-repeat;
 }
