@@ -105,7 +105,7 @@ void readJoystick(){
   joyDec=joyTrigger+(joyGrip*2)+(joyButtonDown*4)+(joyButtonUp*8)
   +(joyBarDown*16)+(joyBarUp*32)+(joyLeft*64)+(joyRight*128)+(joyDown*256)+(joyUp*512);
   
-  //large string
+  /*//large string
   if(joyTrigger){
     // print the results to the serial monitor:
     Serial.print("{\"r\":"); 
@@ -120,24 +120,22 @@ void readJoystick(){
   else if(lastTimeJoyOn){
     lastTimeJoyOn=false
     Serial.println("S")
-  }
- 
-  /*
+  }*/
+  
   //short string
   if(joyTrigger){
     // print the results to the serial monitor:
-    Serial.print("j,"); 
+    Serial.print("["); 
     Serial.print(rightMotorScaled);      
     Serial.print(",");      
     Serial.print(leftMotorScaled);   
     Serial.print(",");   
-    Serial.println(joyDec);
+    Serial.print(joyDec);
+    Serial.println("]");
     lastTimeJoyOn=true
   }
   else if(lastTimeJoyOn){
     lastTimeJoyOn=false
     Serial.println("S")
   }
-  */
-  
 }
