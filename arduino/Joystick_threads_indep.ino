@@ -54,10 +54,10 @@ void readJoystick(){
   //http://www.youtube.com/watch?v=sGpgWDIVsoE
   // read the analog axis and reescale from 0..1023 to -255..255
   y = analogRead(1); 
-  throttle = ((512+caly)-y)/2;
+  throttle = map(analogRead(1),847,942,255,-255);
   delayMicroseconds(100);
   x = analogRead(0);
-  direction = -((512+calx)-x)/2;
+  direction = -map(analogRead(0),480,732,255,-255);
   
   //mix throttle and direction
   leftMotor = throttle+direction;
@@ -77,8 +77,8 @@ void readJoystick(){
   leftMotorScaled = constrain(leftMotor/maxMotorScale,-100,100);
   rightMotorScaled = constrain(rightMotor/maxMotorScale,-100,100);
   
-  if(abs(leftMotorScaled)<deadzone)leftMotorScaled=0
-  if(abs(rightMotorScaled)<deadzone)leftMotorScaled=0 
+  if(abs(leftMotorScaled)<deadZone)leftMotorScaled=0;
+  if(abs(rightMotorScaled)<deadZone)leftMotorScaled=0; 
   ///////////////////////BUTTON/////////////////////////////////
   digitalWrite(brown,HIGH);
   joyBarUp = digitalRead(white);
@@ -102,40 +102,41 @@ void readJoystick(){
   joyButtonDown = digitalRead(blue);
   digitalWrite(yellow,LOW);
   
-  joyDec=joyTrigger+(joyGrip*2)+(joyButtonDown*4)+(joyButtonUp*8)
-  +(joyBarDown*16)+(joyBarUp*32)+(joyLeft*64)+(joyRight*128)+(joyDown*256)+(joyUp*512);
-  
-  /*//large string
+  joyDec=joyButtonDown+(joyButtonUp*2)
+  +(joyLeft*4)+(joyRight*8)+(joyDown*16)+(joyUp*32);
+  /*
+  //large string
   if(joyTrigger){
     // print the results to the serial monitor:
     Serial.print("{\"r\":"); 
-    Serial.print(rightMotorScaled);      
+    Serial.print(-rightMotorScaled);      
     Serial.print(",\"l\":");      
-    Serial.print(leftMotorScaled);   
+    Serial.print(-leftMotorScaled);   
     Serial.print(",\"b\":");   
     Serial.print(joyDec);
     Serial.println("}");
-    lastTimeJoyOn=true
+    lastTimeJoyOn=true;
   }
   else if(lastTimeJoyOn){
-    lastTimeJoyOn=false
-    Serial.println("S")
-  }*/
-  
+    lastTimeJoyOn=false;
+    Serial.println("S");
+  }
+ */
   //short string
   if(joyTrigger){
     // print the results to the serial monitor:
     Serial.print("["); 
-    Serial.print(rightMotorScaled);      
+    Serial.print(-rightMotorScaled);      
     Serial.print(",");      
-    Serial.print(leftMotorScaled);   
+    Serial.print(-leftMotorScaled);   
     Serial.print(",");   
     Serial.print(joyDec);
     Serial.println("]");
-    lastTimeJoyOn=true
+    lastTimeJoyOn=true;
   }
   else if(lastTimeJoyOn){
-    lastTimeJoyOn=false
-    Serial.println("S")
+    lastTimeJoyOn=false;
+    Serial.println("[0,0,0]");
   }
+  
 }

@@ -122,11 +122,13 @@ function Pan(element) {
     }
     
     this.setDistance = function(value) {
+        if (value > 90) value = 90;
+        if (value < -90) value = -90;
         this.distance = value;
     }
     
     this.update = function() {
-        // TODO:
+        this._element.style.webkitTransform= "rotate(" + this.pan + "deg)";
     }
 }
 
@@ -136,6 +138,8 @@ function Tilt(element) {
     this.distance = 0;
     
     this.setTilt = function(value) {
+        if (value > 90) value = 90;
+        if (value < -90) value = -90;
         this.tilt = value;
     }
     
@@ -144,7 +148,7 @@ function Tilt(element) {
     }
     
     this.update = function() {
-        // TODO:
+        this._element.style.webkitTransform= "rotate(" + this.tilt + "deg)";
     }
 }
 
@@ -194,6 +198,11 @@ function getJoystickData(data) {
                 onOff = 1;
                 buttons |= i;
             }
+            /*if (i == 4) pan.setPan(pan.pan - 5);
+            if (i == 8) pan.setPan(pan.pan + 5);
+            if (i == 16) tilt.setTilt(tilt.tilt + 5);
+            if (i == 32) tilt.setTilt(tilt.tilt - 5);*/
+            
             orugas.emit("sendData", 'b' + getLeter(i, onOff) + '\n');
         }
     }
