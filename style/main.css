@@ -130,26 +130,23 @@ body {
     float: left;
     background-image: url("../images/pan.png");
     background-repeat: no-repeat;
-   /* z-index: 100;*/
+    z-index: 100;
     position: absolute;
 }
 
 .pan {
     background-image: url("../images/pan_fondo.png");
     background-repeat: no-repeat;
-    background-position: -3px -3px;
-    width: 194px;
-    height: 102px;
-    border-radius: 100px 100px 0 0;
-    margin: 3px 0 0 3px;
-    /*z-index: 1;*/
+    width: 200px;
+    height: 200px;
+    z-index: 1;
     /*position: absolute;*/
 }
 
 .tilt_space {
     width: 200px;
     height: 200px;
-    margin-left: 215px;
+    margin-left: 240px;
 }
 
 .tilt_marco {
@@ -157,20 +154,16 @@ body {
     height: 200px;
     background-image: url("../images/tilt.png");
     background-repeat: no-repeat;
-    margin-top: -3px;
-    /*z-index: 100;*/
+    z-index: 100;
     position: absolute;
 }
 
 .tilt {
     background-image: url("../images/tilt_fondo.png");
     background-repeat: no-repeat;
-    background-position: -97px -3px;
-    width: 102px;
-    height: 194px;
-    border-radius: 0 100px 100px 0;
-    margin: 3px 0 0 95px;
-    /*z-index: 1;*/
+    width: 200px;
+    height: 200px;
+    z-index: 1;
     /*position: absolute;*/
 }
 
