@@ -84,8 +84,9 @@ function Map(element) {
     };
 }
 
-function Luminosity(element) {
+function Luminosity(element, luminosityV) {
     this._element = element;
+    this._luminosityV = luminosityV
     this.luminosity = 0;
     
     this.setLuminosity = function(value) {
@@ -94,11 +95,13 @@ function Luminosity(element) {
     
     this.update = function() {
         this._element.style.backgroundPosition="0px "+ (200-this.luminosity*2) +"px";
+        this._luminosityV.innerHTML = this.luminosity;
     }
 }
 
-function Temperature(element) {
+function Temperature(element, temperatureV) {
     this._element = element;
+    this._temperatureV = temperatureV;
     this.temperature = 0;
     
     this.setTemperature = function(value) {
@@ -109,11 +112,13 @@ function Temperature(element) {
     
     this.update = function() {
         this._element.style.backgroundPosition="0px "+ (130-this.temperature*2.6) +"px";
+        this._temperatureV.innerHTML = this.temperature;
     }
 }
 
-function Pan(element) {
+function Pan(element, distanceV) {
     this._element = element;
+    this._distanceV = distanceV;
     this.pan = 0;
     this.distance = 0;
     
@@ -132,7 +137,7 @@ function Pan(element) {
     this.update = function() {
         this._element.style.webkitTransform= "rotate(" + this.pan + "deg)";
         this._element.style.backgroundPosition="0px "+ -(this.distance/10) +"px";
-        
+        this._distanceV.innerHTML = this.distance;
     }
 }
 
@@ -222,21 +227,21 @@ function main()
         horizon = new Horizon(document.getElementById('horizon'));
         compass = new Compass(document.getElementById('compass'));
         map = new Map(document.getElementById('map-canvas'));
-        temperature = new Temperature(document.getElementById('termometer'));
-        luminosity = new Luminosity(document.getElementById('luminosity'));
-        pan = new Pan(document.getElementById('pan'));
+        temperature = new Temperature(document.getElementById('termometer'), document.getElementById('temperature_value'));
+        luminosity = new Luminosity(document.getElementById('luminosity'), document.getElementById('luminosity_value'));
+        pan = new Pan(document.getElementById('pan'), document.getElementById('distance_value'));
         tilt = new Tilt(document.getElementById('tilt'));
         
         
-        /*tilt.setDistance(400);
-        tilt.setTilt(45);
-        tilt.update();
+        /*pan.setDistance(400);
+        pan.setPan(45);
+        pan.update();
         /*temperature.setTemperature(30);
         temperature.update();
         
         luminosity.setLuminosity(30);
         luminosity.update();
-        
+        /*
         // TODO: remove debug code
         setInterval("test_horizon()", 80);
         setInterval("test_compass()", 80);
