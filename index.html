@@ -3,33 +3,33 @@
   <head>
     <title>Orugas</title>
     <meta charset="utf-8">
-    
+
     <link rel="stylesheet" href="style/main.css" type="text/css" />
     <script type="text/javascript" src="js/main.js"></script>
-    
+
     <script src="js/jquery-1.7.1.min.js"></script>
     <script src="js/jquery.mousewheel-min.js"></script>
     <script src="js/jquery.terminal-0.6.3.min.js"></script>
     <link href="style/jquery.terminal.css" rel="stylesheet"/>
-    
+
     <script src="/socket.io/socket.io.js"></script>
-    
+
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    
+
     <script>
         main();
     </script>
   </head>
   <body>
     <div class="left_column">
-        <div class="camara">   
+        <div class="camara">
             <img height="300" src="images/tv.png" />
         </div>
         <div class="mapa">
             <div id="mapa_text"></div>
             <div id="map-canvas"></div>
         </div>
-        
+
     </div>
     <div class="right_column">
         <div class="right_left">
@@ -48,6 +48,8 @@
                 <div class="luminosidad_marco"></div><div class="luminosidad" id="luminosity"></div>
             </div>
         </div>
+    </div>
+    <div class="right_column">
         <div class="right_left">
             <div class="pan_space">
                 <div class="pan_marco"></div><div class="pan" id="pan"></div>
@@ -56,9 +58,23 @@
                 <div class="tilt_marco"></div><div class="tilt" id="tilt"></div>
             </div>
         </div>
-        <div class="right_right"><div></div>
+        <div class="right_right">
+            <table class="values_space">
+                <tr>
+                    <td>Distancia:</td>
+                    <td><span id="distance_value">--</span> m</td>
+                </tr>
+                <tr>
+                    <td>Temperatura:</td>
+                    <td><span id="temperature_value">--</span> ºC</td>
+                </tr>
+                <tr>
+                    <td>Luminosidad:</td>
+                    <td><span id="luminosity_value">--</span> %</td>
+                </tr>
+            </table>
         </div>
-        <div id="orugas_terminal"></div>
     </div>
+    <div id="orugas_terminal"></div>
   </body>
 </html>

@@ -147,7 +147,7 @@ body {
 .tilt_space {
     width: 200px;
     height: 200px;
-    margin-left: 315px;
+    margin-left: 215px;
 }
 
 .tilt_marco {
@@ -168,6 +168,13 @@ body {
     margin-left: 93px;
     /*z-index: 1;*/
     /*position: absolute;*/
+}
+
+.values_space {
+    width: 200px;
+    font-weight: bold;
+    color: #fff;
+    float: left;
 }
 
 .left_column {
