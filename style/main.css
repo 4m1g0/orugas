@@ -174,7 +174,7 @@ body {
     width: 200px;
     font-weight: bold;
     color: #fff;
-    float: left;
+    /*float: left;*/
 }
 
 .left_column {
@@ -203,6 +203,12 @@ body {
     height: 270px;
 }
 
+.terminal_space {
+    margin-left: 20px;
+    width:500px;
+    height:400px;
+
+}
 
 
 
