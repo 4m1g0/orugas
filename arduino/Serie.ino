@@ -54,7 +54,7 @@ void parseSerial() {
   if (serialData[0] == 'm') { // movement
     int speed[2];
     
-    if (!parseCommand(serialData+2, speed)) { // TODO: Implement a better algorithm
+    if (!parseCommand(serialData+1, speed)) { // TODO: Implement a better algorithm
       
       speed[0] = constrain(speed[0], -100, 100);
       speed[1] = constrain(speed[1], -100, 100);
