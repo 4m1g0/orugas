@@ -137,9 +137,11 @@ body {
 .pan {
     background-image: url("../images/pan_fondo.png");
     background-repeat: no-repeat;
-    width: 200px;
-    height: 107px;
+    background-position: -3px -3px;
+    width: 194px;
+    height: 102px;
     border-radius: 100px 100px 0 0;
+    margin: 3px 0 0 3px;
     /*z-index: 1;*/
     /*position: absolute;*/
 }
@@ -155,6 +157,7 @@ body {
     height: 200px;
     background-image: url("../images/tilt.png");
     background-repeat: no-repeat;
+    margin-top: -3px;
     /*z-index: 100;*/
     position: absolute;
 }
@@ -162,10 +165,11 @@ body {
 .tilt {
     background-image: url("../images/tilt_fondo.png");
     background-repeat: no-repeat;
-    width: 107px;
-    height: 200px;
+    background-position: -97px -3px;
+    width: 102px;
+    height: 194px;
     border-radius: 0 100px 100px 0;
-    margin-left: 93px;
+    margin: 3px 0 0 95px;
     /*z-index: 1;*/
     /*position: absolute;*/
 }
