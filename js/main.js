@@ -1,4 +1,4 @@
-var horizon, compass, map, orugas, joystick, buttons, lastPulse, temperature, luminosity;
+var horizon, compass, map, orugas, joystick, buttons, lastPulse, temperature, luminosity, pan, tilt;
 
 var global = new function () {
     this.debug = 1;
@@ -118,17 +118,21 @@ function Pan(element) {
     this.distance = 0;
     
     this.setPan = function(value) {
+        if (value > 90) value = 90;
+        if (value < -90) value = -90;
         this.pan = value;
     }
     
     this.setDistance = function(value) {
-        if (value > 90) value = 90;
-        if (value < -90) value = -90;
+        if (value > 1000) value = 1000;
+        if (value < 0) value = 0;
         this.distance = value;
     }
     
     this.update = function() {
         this._element.style.webkitTransform= "rotate(" + this.pan + "deg)";
+        this._element.style.backgroundPosition="0px "+ -(this.distance/10) +"px";
+        
     }
 }
 
@@ -144,10 +148,13 @@ function Tilt(element) {
     }
     
     this.setDistance = function(value) {
+        if (value > 1000) value = 1000;
+        if (value < 0) value = 0;
         this.distance = value;
     }
     
     this.update = function() {
+        this._element.style.backgroundPosition=-100+(this.distance/10) +"px 0px";
         this._element.style.webkitTransform= "rotate(" + this.tilt + "deg)";
     }
 }
@@ -165,13 +172,13 @@ function getOrugasData(data) {
     } else if (data.p != undefined) {
         horizon.setHeight(data.p[0]);
         horizon.setRotation(data.p[1]);
-        //pan.setDistance(data.p[2]);
-        //tilt.setDistance(data.p[2]);
+        pan.setDistance(data.p[2]);
+        tilt.setDistance(data.p[2]);
 	    compass.setRotation(data.p[3]);
 	    horizon.update();
 	    compass.update();
-	    //pan.update();
-	    //tilt.update();
+	    pan.update();
+	    tilt.update();
 	    if (global.isDebug())
 	        $('#orugas_terminal').terminal().echo('[Orugas] ' + data.p[0] + ',' + data.p[1] + ',' + data.p[2] + ',' + data.p[3]);
 	    return;
@@ -198,10 +205,10 @@ function getJoystickData(data) {
                 onOff = 1;
                 buttons |= i;
             }
-            /*if (i == 4) pan.setPan(pan.pan - 5);
+            if (i == 4) pan.setPan(pan.pan - 5);
             if (i == 8) pan.setPan(pan.pan + 5);
             if (i == 16) tilt.setTilt(tilt.tilt + 5);
-            if (i == 32) tilt.setTilt(tilt.tilt - 5);*/
+            if (i == 32) tilt.setTilt(tilt.tilt - 5);
             
             orugas.emit("sendData", 'b' + getLeter(i, onOff) + '\n');
         }
@@ -217,7 +224,13 @@ function main()
         map = new Map(document.getElementById('map-canvas'));
         temperature = new Temperature(document.getElementById('termometer'));
         luminosity = new Luminosity(document.getElementById('luminosity'));
+        pan = new Pan(document.getElementById('pan'));
+        tilt = new Tilt(document.getElementById('tilt'));
         
+        
+        /*tilt.setDistance(400);
+        tilt.setTilt(45);
+        tilt.update();
         /*temperature.setTemperature(30);
         temperature.update();
         

@@ -140,6 +140,7 @@ body {
     width: 200px;
     height: 200px;
     z-index: 1;
+    border-radius: 100px;
     /*position: absolute;*/
 }
 
@@ -161,9 +162,11 @@ body {
 .tilt {
     background-image: url("../images/tilt_fondo.png");
     background-repeat: no-repeat;
+    background-position: -100px, 0px;
     width: 200px;
     height: 200px;
     z-index: 1;
+    border-radius: 100px;
     /*position: absolute;*/
 }
 
