@@ -88,8 +88,8 @@ body {
 }
 
 .termometro {
-    width: 85px;
-    height: 199px;
+    width: 86px;
+    height: 200px;
     background-image: url("../images/termometro_fondo.png");
     background-repeat: no-repeat;
 }
@@ -117,6 +117,59 @@ body {
     background-repeat: no-repeat;
 }
 
+.pan_space {
+    width: 200px;
+    height: 200px;
+    margin-left: 25px;
+    float: left;
+}
+
+.pan_marco {
+    width: 200px;
+    height: 200px;
+    float: left;
+    background-image: url("../images/pan.png");
+    background-repeat: no-repeat;
+   /* z-index: 100;*/
+    position: absolute;
+}
+
+.pan {
+    background-image: url("../images/pan_fondo.png");
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 107px;
+    border-radius: 100px 100px 0 0;
+    /*z-index: 1;*/
+    /*position: absolute;*/
+}
+
+.tilt_space {
+    width: 200px;
+    height: 200px;
+    margin-left: 315px;
+}
+
+.tilt_marco {
+    width: 200px;
+    height: 200px;
+    background-image: url("../images/tilt.png");
+    background-repeat: no-repeat;
+    /*z-index: 100;*/
+    position: absolute;
+}
+
+.tilt {
+    background-image: url("../images/tilt_fondo.png");
+    background-repeat: no-repeat;
+    width: 107px;
+    height: 200px;
+    border-radius: 0 100px 100px 0;
+    margin-left: 93px;
+    /*z-index: 1;*/
+    /*position: absolute;*/
+}
+
 .left_column {
     width: 450px;
     float: left;
@@ -125,7 +178,7 @@ body {
 
 .right_column {
     width: 640px;
-    margin: 0px 0px 0px 450px;
+    margin: 0px 0px 0px 400px;
 }
 
 .right_left {
