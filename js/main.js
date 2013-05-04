@@ -163,8 +163,8 @@ function getOrugasData(data) {
             $('#orugas_terminal').terminal().echo('[Orugas] ' + data.e[0] + ',' + data.e[1] + ',' + data.e[2] + ',' + data.e[3]);
         return;
     } else if (data.p != undefined) {
-        horizon.setHeight(data.p[1]);
-        horizon.setRotation(data.p[0]);
+        horizon.setHeight(data.p[0]);
+        horizon.setRotation(data.p[1]);
         //pan.setDistance(data.p[2]);
         //tilt.setDistance(data.p[2]);
 	    compass.setRotation(data.p[3]);
