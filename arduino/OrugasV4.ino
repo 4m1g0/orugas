@@ -17,8 +17,10 @@
 const int loopTime = 100;
 const int positionTime = 100;
 const int enviromentTime = 2000;
+const int commTimeout=1000;
 
-unsigned long loopTimer=0, positionTimer=0, enviromentTimer=0;
+unsigned long loopTimer=0, positionTimer=0,
+enviromentTimer=0,lastPacketReceived=0;
 
 int motorA1 = 3;
 int motorA2 = 5;
@@ -35,9 +37,9 @@ long distancia=0;
 long temperatura=0;
 long lum=0;
 
-float longitud;
-float latitud;
-float orientacion;
+float longitud=43.3621;
+float latitud=-8.4125;
+float orientacion=0;
 
 //Acelerometro
 int x;
@@ -54,7 +56,7 @@ Servo servoTilt;
 
 void setup() {
   Serial.begin(9600); // Start serial communication
-
+  pinMode(13,OUTPUT);
   pinMode(out_STBY,OUTPUT);
   pinMode(out_A_PWM,OUTPUT);
   pinMode(out_A_IN1,OUTPUT);
@@ -74,6 +76,7 @@ void setup() {
   servoTilt.attach(5);
 
   Home();
+  lastPacketReceived=millis();
 }
 
 void loop() {
@@ -82,8 +85,11 @@ void loop() {
   // if available read serial
   if (Serial.available()) {
     parseSerial();
+    lastPacketReceived=millis();
+    digitalWrite(13, LOW);
   }
-
+  //lost connection protection
+  if (millis()-lastPacketReceived>commTimeout)CommDown();
   // if necesary read enviroment sensors and send data
   if (millis() - enviromentTimer > enviromentTime) {
     // light, temperature, and gps
@@ -94,9 +100,9 @@ void loop() {
     Serial.print(",");
     Serial.print(temperatura);
     Serial.print(",");
-    Serial.print(latitud);
+    Serial.print(latitud,4);
     Serial.print(",");
-    Serial.print(longitud);
+    Serial.print(longitud,4);
     Serial.println("]}");
     
     enviromentTimer = millis();
@@ -121,7 +127,7 @@ void loop() {
     
     positionTimer = millis();
   }
-
+  
   // Si el serial no esta sobrecargado esperamos
   while (millis() - loopTimer < loopTime && !Serial.available())
     delay(20);
@@ -137,5 +143,14 @@ void Home(){
   digitalWrite(13, HIGH);
   delay(200);
   digitalWrite(13, LOW);
-}  
-  
+}
+
+void CommDown(){
+  motor_standby(true);
+  anglePan=90;
+  angleTilt=130;
+  servoTilt.write(angleTilt); 
+  delay(1000);
+  servoPan.write(anglePan);
+  digitalWrite(13, HIGH);
+}

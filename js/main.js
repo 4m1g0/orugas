@@ -102,6 +102,8 @@ function Temperature(element) {
     this.temperature = 0;
     
     this.setTemperature = function(value) {
+        if (value > 40) value = 40;
+        if (value < -5) value = -5;
         this.temperature = value;
     }
     
