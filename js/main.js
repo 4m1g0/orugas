@@ -164,7 +164,7 @@ function Tilt(element) {
     }
 }
 
-function getOrugasData(data) {
+function getData(data) {
    if (data.e != undefined) {
         luminosity.setLuminosity(data.e[0]);
         temperature.setTemperature(data.e[1]);
@@ -175,11 +175,13 @@ function getOrugasData(data) {
             $('#orugas_terminal').terminal().echo('[Orugas] ' + data.e[0] + ',' + data.e[1] + ',' + data.e[2] + ',' + data.e[3]);
         return;
     } else if (data.p != undefined) {
-        horizon.setHeight(data.p[0]);
-        horizon.setRotation(data.p[1]);
-        pan.setDistance(data.p[2]);
-        tilt.setDistance(data.p[2]);
-	    compass.setRotation(data.p[3]);
+        pan.setPan(data.p[0]);
+        tilt.setTilt(data.p[1])
+        horizon.setHeight(data.p[2]);
+        horizon.setRotation(data.p[3]);
+        pan.setDistance(data.p[4]);
+        tilt.setDistance(data.p[5]);
+	    compass.setRotation(data.p[6]);
 	    horizon.update();
 	    compass.update();
 	    pan.update();
@@ -189,37 +191,6 @@ function getOrugasData(data) {
 	    return;
     }
 }
-
-function getJoystickData(data) {
-    if (global.isDebug())
-        $('#orugas_terminal').terminal().echo('[Joystick]: x = ' + data[0] + '  y = ' + data[1] + '  b = ' + data[2]);
-    
-    orugas.emit("sendData", 'm' + data[0] + ',' + data[1] + '\r\n');
-    
-    // parse botons
-    var changed = lastPulse ^ data[2]; // obtenemos un mapa con los bits que han cambiado
-    var onOff;
-    lastPulse = data[2];
-    
-    for (i = 1; i <= 64; i*=2) {
-        if (i & changed && i & data[2]) { // si el bit i ha cambiado y vale 1
-            if (buttons & i) { // si ya estaba encendido lo apago
-                onOff = 0;
-                buttons &= ~i;
-            } else { // si estaba apagado lo enciendo
-                onOff = 1;
-                buttons |= i;
-            }
-            if (i == 4) pan.setPan(pan.pan - 5);
-            if (i == 8) pan.setPan(pan.pan + 5);
-            if (i == 16) tilt.setTilt(tilt.tilt + 5);
-            if (i == 32) tilt.setTilt(tilt.tilt - 5);
-            
-            orugas.emit("sendData", 'b' + getLeter(i, onOff) + '\n');
-        }
-    }
-}
-
 
 function main()
 {
@@ -255,7 +226,7 @@ function main()
     jQuery(function($, undefined) {
         $('#orugas_terminal').terminal({
                 send: function(arg1) {
-                    orugas.emit("sendData", arg1);
+                    joystick.emit("sendData", arg1);
                 },
                 add: function(a, b) {
                     this.echo(parseInt(a)+parseInt(b));
@@ -268,12 +239,10 @@ function main()
     });
     
     // open a connection to the serial server:
-	orugas = io.connect('http://localhost:8080');
 	joystick = io.connect('http://localhost:8081');
 
 	 // when you get a serialdata event, do this:
-	orugas.on('serialEvent', getOrugasData);
-	joystick.on('serialEvent', getJoystickData);
+	joystick.on('serialEvent', getData);
 }
 
 

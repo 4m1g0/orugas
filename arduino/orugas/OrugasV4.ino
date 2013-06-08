@@ -14,9 +14,9 @@
 
 /*********/
 
-const int loopTime = 100;
-const int positionTime = 100;
-const int enviromentTime = 2000;
+const int loopTime = 0;
+const int positionTime = 99;
+const int enviromentTime = 399;
 const int commTimeout=1000;
 
 unsigned long loopTimer=0, positionTimer=0,
@@ -76,6 +76,7 @@ void setup() {
   servoTilt.attach(5);
 
   Home();
+  calibraAcel();
   lastPacketReceived=millis();
 }
 
@@ -95,7 +96,7 @@ void loop() {
     // light, temperature, and gps
     temp();
     luminosidad();
-    Serial.print("{\"e\":[");
+    Serial.print("e");
     Serial.print(lum);
     Serial.print(",");
     Serial.print(temperatura);
@@ -103,7 +104,7 @@ void loop() {
     Serial.print(latitud,4);
     Serial.print(",");
     Serial.print(longitud,4);
-    Serial.println("]}");
+    Serial.print("\n");
     
     enviromentTimer = millis();
   }
@@ -115,15 +116,15 @@ void loop() {
     acelerometro(false);
     ultrasonidos();
     
-    Serial.print("{\"p\":[");
+    Serial.print("p);
     Serial.print(y);
     Serial.print(",");
     Serial.print(x);
     Serial.print(",");
     Serial.print(distancia);
     Serial.print(",");
-    Serial.print(orientacion); // TODO: set this variable
-    Serial.println("]}");
+    Serial.print(orientacion); 
+    Serial.print("\n");
     
     positionTimer = millis();
   }

@@ -1,3 +1,8 @@
+#define PT_MAX_TILT   180    // Angulos maximos y minimos del pantilt
+#define PT_MAX_PAN    180
+#define PT_MIN_TILT   0
+#define PT_MIN_PAN    0
+
 void parseSerial() {
   char serialData[32];
   Serial.readBytesUntil('\n', serialData, 31);
@@ -17,7 +22,7 @@ void parseSerial() {
       case 'f': // light off
         digitalWrite(luz,LOW);
         break;
-      case 'T': // tilt up
+      /*case 'T': // tilt up
         if (angleTilt < 180) {
           angleTilt += 5;
           servoTilt.write(angleTilt);
@@ -40,7 +45,7 @@ void parseSerial() {
           anglePan -= 5;
           servoPan.write(anglePan);
         }
-        break;
+        break;*/
       case 'c': // reset ?
         Home();
         calibraAcel();
@@ -54,8 +59,7 @@ void parseSerial() {
   if (serialData[0] == 'm') { // movement
     int speed[2];
     
-    if (!parseCommand(serialData+1, speed)) { // TODO: Implement a better algorithm
-      
+    if (!parseCommand(serialData+1, speed)) {
       speed[0] = constrain(speed[0], -100, 100);
       speed[1] = constrain(speed[1], -100, 100);
       if(speed[0]==0 && speed[1]==0){
@@ -66,6 +70,17 @@ void parseSerial() {
         motor_speed2(motor_A,speed[0]);
         motor_speed2(motor_B,speed[1]);
       }
+    }
+    return;
+  }
+  
+  if (serialData[0] == 'p') { // pantilt
+    int pantilt[2];
+    if (!parseCommand(serialData+1, pantilt)) {
+      pantilt[0] = constrain(pantilt[0], PT_MIN_PAN, PT_MAX_PAN);
+      pantilt[1] = constrain(pantilt[1], PT_MIN_TILT, PT_MAX_TILT);
+      servoPan.write(pantilt[0]);
+      servoTilt.write(pantilt[1]);
     }
     return;
   }
@@ -81,7 +96,6 @@ int parseCommand(char* command, int* returnValues)
   int temp = 0;
   while(*(command + i) != '\0' && *(command + i) != '\n' && *(command + i) != '\r')
   {
-    if (i > 9) return -1;
     switch(*(command + i))
     {
       case ',':
@@ -98,7 +112,6 @@ int parseCommand(char* command, int* returnValues)
           break;
         temp = temp * 10 + *(command + i) - 48;
     }
-    i++;
   }
   // set last return value
   returnValues[j] = sign?-temp:temp;
